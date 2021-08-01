@@ -1,15 +1,23 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, combineLatest, forkJoin, from, merge, Observable, of, Subject, zip } from 'rxjs';
 import { map, mergeMap, switchMap, concatMap, delay, debounceTime, takeUntil, skip, exhaustMap } from 'rxjs/operators';
+import { CustomComboboxComponent } from './components/custom-combobox/custom-combobox.component';
+import { CustomTextinputComponent } from './components/custom-textinput/custom-textinput.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   title = 'angular-experiments';
+
+  @ViewChild('customcombobox')
+  comboboxChild!: CustomComboboxComponent;
+
+  @ViewChild('customtextinput') 
+  textinputChild!: CustomTextinputComponent;
 
   obs1 = from([1, 2, 3]);
   obs2 = from(['a', 'b', 'c']);
@@ -28,6 +36,10 @@ export class AppComponent {
 
   constructor(private httpClient: HttpClient) {
     this.testNgTypeahead(this.ngTypeahead2);
+  }
+  ngAfterViewInit(): void {
+    const subscriber = this.textinputChild.changeSubscriber.bind(this.textinputChild);
+    this.comboboxChild.onChange.subscribe(subscriber);
   }
 
   getCurrentTime(): string {

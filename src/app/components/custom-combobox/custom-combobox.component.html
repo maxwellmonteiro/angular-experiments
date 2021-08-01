@@ -1,0 +1,8 @@
+<mat-form-field appearance="fill">
+    <mat-label>Fruits</mat-label>
+    <mat-select (selectionChange)="handleChange($event)">
+        <mat-option *ngFor="let fruit of fruits" [value]="fruit">
+            {{fruit}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
